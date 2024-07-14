@@ -24,10 +24,10 @@ public class Post {
     private String title;
 
     @Column(name = "created_at")
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -37,11 +37,11 @@ public class Post {
     private List<PostImage> images = new ArrayList<>();
 
     // 생성 메서드
-    public static Post createPost(String title, LocalDateTime createAt, List<String>imageUrls ,Member member) {
+    public static Post createPost(String title, List<String>imageUrls ,Member member) {
         Post post = new Post();
         post.setTitle(title);
-        post.setCreateAt(LocalDateTime.now());
-        post.setUpdateAt(LocalDateTime.now());
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());
         post.setMember(member);
 
         for (String imageUrl : imageUrls) {
