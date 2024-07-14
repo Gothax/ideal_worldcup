@@ -23,6 +23,8 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String nickname;
 
+
+
     public static Member createMember(String password, String email, String nickname) {
         Member member = new Member();
         member.setPassword(password);
