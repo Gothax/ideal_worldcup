@@ -1,34 +1,63 @@
 package ideal.worldcup.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "post_image")
-@Getter @Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostImage {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     @Column(name = "post_image_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String imageUrl;
+    private String originFileName;
+    private String storeFileName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    // 생성 메서드
-    public static PostImage createPostImage(String imageUrl, Post post) {
-        PostImage postImage = new PostImage();
-        postImage.setImageUrl(imageUrl);
-        postImage.setPost(post);
-        return postImage;
+
+    // 연관관계 메서드
+    protected void setPost(Post post) {
+        this.post = post;
     }
 
+    // 생성 메서드
+    @Builder
+    public PostImage(String originFileName, String storeFileName, Post post) {
+        this.originFileName = originFileName;
+        this.storeFileName = storeFileName;
+        this.post = post;
+    }
+
+    // 오버로딩, image file을 넘기는 방식
+    public static PostImageBuilder builder(MultipartFile file, Post post) {
+        String originFileName = file.getOriginalFilename();
+        String storeFileName = createStoreFileName(originFileName);
+
+        // 여기서 실제 파일 저장 로직 수행
+        // saveFile(storeFileName, file);
+
+        return new PostImageBuilder()
+                .originFileName(originFileName)
+                .storeFileName(storeFileName)
+                .post(post);
+    }
+
+    public static String createStoreFileName(String originFileName) {
+        String ext = extractExt(originFileName);
+        return UUID.randomUUID().toString() + "." + ext;
+    }
+
+    private static String extractExt(String originFileName) {
+        int pos = originFileName.lastIndexOf(".");
+        return originFileName.substring(pos + 1);
+    }
 }

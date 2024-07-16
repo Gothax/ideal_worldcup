@@ -1,10 +1,7 @@
 package ideal.worldcup.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,16 +9,19 @@ import java.util.List;
 
 @Entity
 @Table(name = "post")
-@Getter @Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
     @Id @GeneratedValue
-    @Column(name = "post_id")
+    @Column(name = "post_id", updatable = false)
     private Long id;
 
     @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
+    private String content;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -29,30 +29,13 @@ public class Post {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    @OneToMany(mappedBy = "post" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostImage> images = new ArrayList<>();
-
     // 생성 메서드
-    public static Post createPost(String title, List<String>imageUrls ,Member member) {
-        Post post = new Post();
-        post.setTitle(title);
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setMember(member);
-
-        for (String imageUrl : imageUrls) {
-            post.addImage(PostImage.createPostImage(imageUrl, post));
-        }
-        
-        return post;
-    }
-
-    private void addImage(PostImage postImage) {
-        this.images.add(postImage);
+    @Builder
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
 }
