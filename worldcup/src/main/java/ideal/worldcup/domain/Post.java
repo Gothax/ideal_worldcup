@@ -17,16 +17,9 @@ public class Post {
     @Column(name = "post_id", updatable = false)
     private Long id;
 
-    @Column(nullable = false)
     private String title;
-
-    @Column(nullable = false)
     private String content;
-
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     // 생성 메서드
@@ -36,6 +29,7 @@ public class Post {
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+
     }
 
 }
