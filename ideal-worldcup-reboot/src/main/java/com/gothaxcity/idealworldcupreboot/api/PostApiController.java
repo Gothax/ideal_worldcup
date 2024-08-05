@@ -1,11 +1,12 @@
 package com.gothaxcity.idealworldcupreboot.api;
 
 import com.gothaxcity.idealworldcupreboot.dto.PostCreateRequest;
-import com.gothaxcity.idealworldcupreboot.service.PostService;
+import com.gothaxcity.idealworldcupreboot.dto.PostCreateResponse;
+import com.gothaxcity.idealworldcupreboot.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
@@ -13,10 +14,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/posts")
 public class PostApiController {
 
-    private final PostService postService;
+    private final PostServiceImpl postServiceImpl;
 
     @PostMapping
-    public void createPost(PostCreateRequest postCreateRequest, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<PostCreateResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest) {
+        postServiceImpl.createPost(postCreateRequest);
+//        return ResponseEntity.status(HttpStatus.CREATED).body()
+    }
+
+    @GetMapping
+    public void postList(PostCreateRequest postCreateRequest, RedirectAttributes redirectAttributes) {
 
     }
 
