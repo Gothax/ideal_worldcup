@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -18,7 +20,7 @@ public class PostApiController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostCreateResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest) {
+    public ResponseEntity<PostCreateResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest) throws IOException {
         PostCreateResponse postCreateResponse = postService.createPost(postCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(postCreateResponse);
     }

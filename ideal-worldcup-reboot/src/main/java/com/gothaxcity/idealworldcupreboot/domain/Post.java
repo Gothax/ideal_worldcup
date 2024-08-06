@@ -1,12 +1,12 @@
 package com.gothaxcity.idealworldcupreboot.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,4 +19,19 @@ public class Post extends BaseEntity {
 
     private String title;
     private String content;
+
+    @OneToMany(mappedBy = "post")
+    private List<PostImage> postImages = new ArrayList<>();
+
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void addPostImage(PostImage postImage) {
+        postImages.add(postImage);
+        if (postImage.getPost() != this) {
+            postImage.setPost(this);
+        }
+    }
 }

@@ -4,16 +4,29 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 800MB
 
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        #        show_sql: true
         format_sql: true
         default_batch_fetch_size: 100
+        jdbc:
+          batch_size: 64
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+
+
 
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.orm.jdbc.bind: trace
+
+file:
+  dir: /Users/leo/worldcup_images/
