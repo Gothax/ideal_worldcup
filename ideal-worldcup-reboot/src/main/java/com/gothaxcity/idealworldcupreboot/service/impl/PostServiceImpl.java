@@ -2,8 +2,8 @@ package com.gothaxcity.idealworldcupreboot.service.impl;
 
 import com.gothaxcity.idealworldcupreboot.domain.Post;
 import com.gothaxcity.idealworldcupreboot.domain.PostImage;
-import com.gothaxcity.idealworldcupreboot.dto.PostCreateRequest;
-import com.gothaxcity.idealworldcupreboot.dto.PostCreateResponse;
+import com.gothaxcity.idealworldcupreboot.dto.request.PostCreateRequest;
+import com.gothaxcity.idealworldcupreboot.dto.response.PostDto;
 import com.gothaxcity.idealworldcupreboot.repository.PostImageRepository;
 import com.gothaxcity.idealworldcupreboot.repository.PostRepository;
 import com.gothaxcity.idealworldcupreboot.service.PostService;
@@ -14,8 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
@@ -23,8 +27,9 @@ public class PostServiceImpl implements PostService {
     private final PostImageRepository postImageRepository;
     private final FileStore fileStore;
 
+    @Override
     @Transactional
-    public PostCreateResponse createPost(PostCreateRequest request) throws IOException {
+    public PostDto createPost(PostCreateRequest request) throws IOException {
 
         List<PostImage> savedPostImages = fileStore.storeFiles(request.getFiles());
         Post post = new Post(request.getTitle(), request.getContent());
@@ -36,7 +41,15 @@ public class PostServiceImpl implements PostService {
             }
         }
         Post savedPost = postRepository.save(post);
-        return new PostCreateResponse(savedPost, savedPostImages);
+        return new PostDto(savedPost);
+    }
+
+    @Override
+    public List<PostDto> postFindAll() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(PostDto::new)
+                .collect(Collectors.toList());
     }
 
 }

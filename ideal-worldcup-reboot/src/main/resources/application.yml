@@ -29,4 +29,6 @@ logging.level:
 #  org.hibernate.orm.jdbc.bind: trace
 
 file:
-  dir: /Users/leo/worldcup_images/
+#  dir: /Users/leo/worldcup_images/
+  dir: /C:/workingspace_g/spring-study-media/
+
