@@ -8,6 +8,8 @@ import lombok.Getter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.*;
+
 @Data
 public class PostDto {
 
@@ -22,8 +24,7 @@ public class PostDto {
         content = post.getContent();
         images = post.getPostImages().stream()
                 .map(postImageDto::new)
-                .collect(Collectors.toList());
-
+                .collect(toList());
     }
 
     @Getter

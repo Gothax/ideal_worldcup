@@ -30,5 +30,20 @@ public class PostApiController {
         return postService.postFindAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getPost(@PathVariable Long id) {
+        PostDto findPost = postService.postFindById(id);
+        if (findPost == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(findPost);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
+        postService.postDelete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

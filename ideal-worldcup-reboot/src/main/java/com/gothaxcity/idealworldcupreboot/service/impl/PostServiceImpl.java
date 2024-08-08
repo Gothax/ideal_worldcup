@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -47,9 +48,24 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> postFindAll() {
         List<Post> posts = postRepository.findAll();
+
         return posts.stream()
                 .map(PostDto::new)
                 .collect(Collectors.toList());
+    }
+
+    // TODO 예외처리, CONTROLLER 응답 수정
+    @Override
+    public PostDto postFindById(Long id) {
+        Optional<Post> findPost = postRepository.findById(id);
+        return findPost.map(PostDto::new).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void postDelete(Long id) {
+        postRepository.deleteById(id);
+        // TODO FILE STORAGE 삭제까지
     }
 
 }
