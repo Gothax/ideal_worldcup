@@ -45,6 +45,7 @@ public class PostServiceImpl implements PostService {
         return new PostDto(savedPost);
     }
 
+    // TODO 페이징
     @Override
     public List<PostDto> postFindAll() {
         List<Post> posts = postRepository.findAll();
