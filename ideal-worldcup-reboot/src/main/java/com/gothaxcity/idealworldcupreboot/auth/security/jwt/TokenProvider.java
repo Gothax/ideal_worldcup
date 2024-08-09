@@ -1,11 +1,37 @@
-package com.gothaxcity.idealworldcupreboot.security.jwt;
+package com.gothaxcity.idealworldcupreboot.auth.security.jwt;
 
 
+import com.gothaxcity.idealworldcupreboot.auth.exception.TokenException;
+import com.gothaxcity.idealworldcupreboot.auth.service.TokenService;
+import com.gothaxcity.idealworldcupreboot.redis.Token;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.gothaxcity.idealworldcupreboot.constant.Constants.ACCESS_TOKEN_EXPIRE_TIME;
+import static com.gothaxcity.idealworldcupreboot.constant.Constants.REFRESH_TOKEN_EXPIRE_TIME;
+import static com.gothaxcity.idealworldcupreboot.exception.ErrorCode.INVALID_JWT_SIGNATURE;
+import static com.gothaxcity.idealworldcupreboot.exception.ErrorCode.INVALID_TOKEN;
+import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 
 @Component
 @RequiredArgsConstructor
@@ -41,11 +67,11 @@ public class TokenProvider {
                 .collect(Collectors.joining());
 
         return Jwts.builder()
-                .subject(authentication.getName())
+                .setSubject(authentication.getName())
                 .claim(KEY_ROLE, authorities)
-                .issuedAt(now)
-                .expiration(expiredDate)
-                .signWith(secretKey, Jwts.SIG.HS512)
+                .setIssuedAt(now)
+                .setExpiration(expiredDate)
+                .signWith(secretKey, HS512)
                 .compact();
     }
 
@@ -87,8 +113,9 @@ public class TokenProvider {
 
     private Claims parseClaims(String token) {
         try {
-            return Jwts.parser().verifyWith(secretKey).build()
-                    .parseSignedClaims(token).getPayload();
+            return Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build().parseClaimsJwt(token).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         } catch (MalformedJwtException e) {

@@ -1,9 +1,9 @@
-package com.gothaxcity.idealworldcupreboot.service.impl;
+package com.gothaxcity.idealworldcupreboot.auth.service;
 
 
+import com.gothaxcity.idealworldcupreboot.auth.OAuth2UserInfo;
+import com.gothaxcity.idealworldcupreboot.auth.PrincipalUserDetails;
 import com.gothaxcity.idealworldcupreboot.domain.Member;
-import com.gothaxcity.idealworldcupreboot.dto.OAuth2UserInfo;
-import com.gothaxcity.idealworldcupreboot.dto.PrincipalUserDetails;
 import com.gothaxcity.idealworldcupreboot.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

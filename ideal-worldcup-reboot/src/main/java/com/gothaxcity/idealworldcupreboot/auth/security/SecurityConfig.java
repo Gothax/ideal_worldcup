@@ -1,4 +1,4 @@
-package com.gothaxcity.idealworldcupreboot.security;
+package com.gothaxcity.idealworldcupreboot.auth.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

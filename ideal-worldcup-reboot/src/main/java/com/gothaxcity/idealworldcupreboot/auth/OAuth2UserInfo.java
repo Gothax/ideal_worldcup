@@ -1,17 +1,13 @@
-package com.gothaxcity.idealworldcupreboot.dto;
+package com.gothaxcity.idealworldcupreboot.auth;
 
+import com.gothaxcity.idealworldcupreboot.auth.exception.AuthException;
 import com.gothaxcity.idealworldcupreboot.domain.Member;
-import com.gothaxcity.idealworldcupreboot.exception.AuthException;
-import com.gothaxcity.idealworldcupreboot.utils.KeyGenerator;
-import jakarta.security.auth.message.AuthStatus;
-import lombok.AllArgsConstructor;
 
 import java.util.Map;
 
 import static com.gothaxcity.idealworldcupreboot.exception.ErrorCode.ILLEGAL_REGISTRATION_ID;
 import static com.gothaxcity.idealworldcupreboot.utils.KeyGenerator.*;
 
-@AllArgsConstructor
 public record OAuth2UserInfo( String email, String nickName, String profileImage) {
 
     public static OAuth2UserInfo of(String registrationId, Map<String, Object> attributes) {

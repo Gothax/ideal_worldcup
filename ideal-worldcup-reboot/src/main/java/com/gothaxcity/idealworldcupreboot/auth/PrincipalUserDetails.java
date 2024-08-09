@@ -1,4 +1,4 @@
-package com.gothaxcity.idealworldcupreboot.dto;
+package com.gothaxcity.idealworldcupreboot.auth;
 
 import com.gothaxcity.idealworldcupreboot.domain.Member;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public record PrincipalUserDetails(Member member, Map<String, Object> attributes, String attributeKey) implements OAuth2User, UserDetails {
