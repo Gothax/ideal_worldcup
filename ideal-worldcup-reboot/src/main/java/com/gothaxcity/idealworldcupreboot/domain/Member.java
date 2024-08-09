@@ -1,13 +1,13 @@
 package com.gothaxcity.idealworldcupreboot.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static jakarta.persistence.EnumType.*;
 
 @Entity
 @Getter
@@ -19,12 +19,32 @@ public class Member extends BaseEntity {
     private Long id;
 
     private String password;
+    @Column(nullable = false, unique = true)
     private String email;
     private String nickName;
+    private String profileImage;
 
-    public Member(String password, String email, String nickName, PasswordEncoder encoder) {
-        this.password = encoder.encode(password);
+    @Column(nullable = false, unique = true)
+    private String memberKey;
+
+    @Enumerated(STRING)
+    private Role role;
+
+    // OAuth
+    public Member(String email, String nickName, String profileImage, String memberKey) {
         this.email = email;
         this.nickName = nickName;
+        this.profileImage = profileImage;
+        this.memberKey = memberKey;
+    }
+
+    // 자체 회원가입
+    public Member(String email, String nickName, String password, String profileImage, String memberKey , Role role, PasswordEncoder encoder) {
+        this.email = email;
+        this.nickName = nickName;
+        this.profileImage = profileImage;
+        this.memberKey = memberKey;
+        this.role = role;
+        this.password = encoder.encode(password);
     }
 }

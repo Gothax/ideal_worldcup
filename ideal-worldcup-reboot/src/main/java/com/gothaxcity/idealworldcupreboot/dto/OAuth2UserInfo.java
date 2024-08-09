@@ -1,11 +1,18 @@
 package com.gothaxcity.idealworldcupreboot.dto;
 
-import jakarta.security.auth.message.AuthException;
+import com.gothaxcity.idealworldcupreboot.domain.Member;
+import com.gothaxcity.idealworldcupreboot.exception.AuthException;
+import com.gothaxcity.idealworldcupreboot.utils.KeyGenerator;
 import jakarta.security.auth.message.AuthStatus;
+import lombok.AllArgsConstructor;
 
 import java.util.Map;
 
-public record OAuth2UserInfo( String email, String nickName) {
+import static com.gothaxcity.idealworldcupreboot.exception.ErrorCode.ILLEGAL_REGISTRATION_ID;
+import static com.gothaxcity.idealworldcupreboot.utils.KeyGenerator.*;
+
+@AllArgsConstructor
+public record OAuth2UserInfo( String email, String nickName, String profileImage) {
 
     public static OAuth2UserInfo of(String registrationId, Map<String, Object> attributes) {
         return switch (registrationId) {
@@ -18,7 +25,11 @@ public record OAuth2UserInfo( String email, String nickName) {
     }
 
     private static OAuth2UserInfo ofGoogle(Map<String, Object> attributes) {
-        return new OAuth2UserInfo(attributes.get("email").toString(), attributes.get("nickname").toString());
+        return new OAuth2UserInfo(attributes.get("email").toString(), attributes.get("nickname").toString(), attributes.get("profileImage").toString());
+    }
+
+    public Member toEntity() {
+        return new Member(email, nickName, profileImage, generateKey());
     }
 }
 
