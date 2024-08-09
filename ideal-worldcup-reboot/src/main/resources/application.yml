@@ -1,46 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/worldcup
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 800MB
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-        default_batch_fetch_size: 100
-        jdbc:
-          batch_size: 64
-          batch_versioned_data: true
-        order_inserts: true
-        order_updates: true
-
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${GOOGLE_CLIENT}
-            client-secret: ${GOOGLE_SECRET}
-            scope: # google API의 범위 값
-              - profile
-              - email
-
-
-
-
-logging.level:
-  org.hibernate.SQL: debug
-#  org.hibernate.orm.jdbc.bind: trace
-
-file:
-#  dir: /Users/leo/worldcup_images/
-  dir: /C:/workingspace_g/spring-study-media/
-
+  profiles:
+    include: oauth
+    active: local
