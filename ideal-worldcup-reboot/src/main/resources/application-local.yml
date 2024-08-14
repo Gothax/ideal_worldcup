@@ -39,7 +39,7 @@ spring:
               - email
 
 jwt:
-  key: c3ByaW5nLWJvb3Qt42sdfzxcadsfyZXQta2V5LXN1cGVyLXNlY3JldC15ZXMteWVzLXlfsdsfc2ewe2
+  key: c3ByaW5nLWJvb3Qt42sdfzxcadsfyZXQta2V5LXN1cGVyLXNlY3JldC15ZXMteWVzLXlfsdsfc2ewe2@fewasxz1
 
 logging.level:
   org.hibernate.SQL: debug
