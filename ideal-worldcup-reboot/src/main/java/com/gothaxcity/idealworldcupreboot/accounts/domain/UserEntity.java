@@ -21,8 +21,19 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
     private String nickName;
-    private String profileImage;
     @Enumerated(STRING)
     private Role role;
 
+    public UserEntity(String password, String email, String nickName, Role role) {
+        this.password = password;
+        this.email = email;
+        this.nickName = nickName;
+        this.role = role;
+    }
+
+    public UserEntity(String password, String email, Role role) {
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
 }
