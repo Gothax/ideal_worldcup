@@ -1,10 +1,12 @@
 package com.gothaxcity.idealworldcupreboot.accounts.repository;
 
+
 import com.gothaxcity.idealworldcupreboot.accounts.domain.Token;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.Date;
 
-public interface TokenRepository extends CrudRepository<Token, String> {
-    Optional<Token> findByAccessToken(String accessToken);
+public interface TokenRepository extends JpaRepository<Token, Long> {
+    void deleteByRefreshToken(String refreshToken);
+    void deleteByExpiration(Date expiration);
 }

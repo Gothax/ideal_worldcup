@@ -4,6 +4,7 @@ import com.gothaxcity.idealworldcupreboot.accounts.domain.UserEntity;
 import com.gothaxcity.idealworldcupreboot.accounts.dto.PrincipalUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import static com.gothaxcity.idealworldcupreboot.global.constant.Constants.ACCES
 import static com.gothaxcity.idealworldcupreboot.global.constant.Constants.REFRESH_TOKEN_EXPIRE_TIME;
 import static java.nio.charset.StandardCharsets.*;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -40,9 +42,12 @@ public class JwtTokenProvider {
     }
 
     private String generateToken(Authentication authentication, Long expirationMs, String category) {
+
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining());
+
+        log.debug("Generating access token for user: {}", authentication.getName());
 
         return Jwts.builder()
                 .subject(authentication.getName())

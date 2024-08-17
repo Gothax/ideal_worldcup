@@ -1,30 +1,27 @@
 package com.gothaxcity.idealworldcupreboot.accounts.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
+import lombok.NoArgsConstructor;
 
+@Entity
 @Getter
-@AllArgsConstructor
-@RedisHash(value = "jwt", timeToLive = 60 * 60 * 24 * 7)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Token {
 
-    @Id
-    private String id;
+    @Id @GeneratedValue
+    private Long id;
 
+    private String username;
     private String refreshToken;
+    private String expiration;
 
-    @Indexed
-    private String accessToken;
-
-    public Token updateRefreshToken(String refreshToken) {
+    public Token(String username, String refreshToken, String expiration) {
+        this.username = username;
         this.refreshToken = refreshToken;
-        return this;
-    }
-
-    public void updateAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+        this.expiration = expiration;
     }
 }
