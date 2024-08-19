@@ -2,6 +2,7 @@ package com.gothaxcity.idealworldcupreboot.accounts.jwt;
 
 import com.gothaxcity.idealworldcupreboot.accounts.domain.UserEntity;
 import com.gothaxcity.idealworldcupreboot.accounts.dto.PrincipalUserDetails;
+import com.gothaxcity.idealworldcupreboot.accounts.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -28,9 +30,11 @@ import static java.nio.charset.StandardCharsets.*;
 public class JwtTokenProvider {
 
     private final SecretKey secretKey;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public JwtTokenProvider(@Value("${jwt.key}") String key) {
+    public JwtTokenProvider(@Value("${jwt.key}") String key, CustomUserDetailsService customUserDetailsService) {
         secretKey = new SecretKeySpec(key.getBytes(UTF_8), Jwts.SIG.HS512.key().build().getAlgorithm());
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     public String generateAccessToken(Authentication authentication) {
@@ -58,12 +62,11 @@ public class JwtTokenProvider {
                 .signWith(secretKey)
                 .compact();
     }
-//
-//    public Authentication getAuthentication(String token) {
-//        UserEntity user = new UserEntity("tempPassword", getTokenSubject(token), );
-//        PrincipalUserDetails principal = new PrincipalUserDetails(user);
-//        return new UsernamePasswordAuthenticationToken(principal, token, principal.getAuthorities());
-//    }
+
+    public Authentication getAuthentication(String token) {
+        PrincipalUserDetails principal = customUserDetailsService.loadUserByUsername(getTokenSubject(token));
+        return new UsernamePasswordAuthenticationToken(principal, token, principal.getAuthorities());
+    }
 
     public String getTokenSubject(String token) {
         return Jwts.parser().verifyWith(secretKey).build()
