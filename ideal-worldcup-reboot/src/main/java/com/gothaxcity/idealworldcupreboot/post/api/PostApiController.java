@@ -3,12 +3,17 @@ package com.gothaxcity.idealworldcupreboot.post.api;
 import com.gothaxcity.idealworldcupreboot.post.dto.PostCreateRequest;
 import com.gothaxcity.idealworldcupreboot.post.dto.PostDto;
 import com.gothaxcity.idealworldcupreboot.post.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.file.attribute.UserPrincipal;
 import java.util.List;
 
 @RestController
@@ -19,8 +24,10 @@ public class PostApiController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostDto> createPost(@ModelAttribute PostCreateRequest postCreateRequest) throws IOException {
-        PostDto postDto = postService.createPost(postCreateRequest);
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<PostDto> createPost(@ModelAttribute @Valid PostCreateRequest postCreateRequest,
+                                              @AuthenticationPrincipal UserPrincipal currentUser) throws IOException {
+        PostDto postDto = postService.createPost(postCreateRequest, currentUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(postDto);
     }
 

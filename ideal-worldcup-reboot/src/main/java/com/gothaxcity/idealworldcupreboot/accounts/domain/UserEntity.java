@@ -14,7 +14,7 @@ import static jakarta.persistence.EnumType.*;
 public class UserEntity extends BaseEntity {
 
     @Id @GeneratedValue
-    @Column(name = "member_id")
+    @Column(name = "user_id")
     private Long id;
 
     private String password;
