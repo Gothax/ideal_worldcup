@@ -21,7 +21,7 @@ public class UserService {
         if (existsByEmail) {
             return;
         }
-        UserEntity user = new UserEntity(bCryptPasswordEncoder.encode(joinRequest.password()), joinRequest.email(), joinRequest.nickName(), Role.USER);
+        UserEntity user = new UserEntity(bCryptPasswordEncoder.encode(joinRequest.password()), joinRequest.email(), joinRequest.nickname(), Role.USER);
         userRepository.save(user);
     }
 }

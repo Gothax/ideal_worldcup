@@ -5,7 +5,7 @@ package com.gothaxcity.idealworldcupreboot.global.constant;
  */
 public class Constants {
 
-    public static final String[] ALLOWED_URLS = {"/login", "/", "/join", "/auth/success"};
+    public static final String[] ALLOWED_URLS = {"/login", "/", "/join", "/auth/success", "/error"};
     public static final String CORS_ALLOW_ORIGIN = "http://localhost:3000";
 
     public static final String TOKEN_PREFIX = "Bearer ";

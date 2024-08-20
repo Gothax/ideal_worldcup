@@ -3,8 +3,7 @@ package com.gothaxcity.idealworldcupreboot.accounts.jwt;
 import com.gothaxcity.idealworldcupreboot.accounts.domain.UserEntity;
 import com.gothaxcity.idealworldcupreboot.accounts.dto.PrincipalUserDetails;
 import com.gothaxcity.idealworldcupreboot.accounts.service.CustomUserDetailsService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -69,25 +68,44 @@ public class JwtTokenProvider {
     }
 
     public String getTokenSubject(String token) {
-        return Jwts.parser().verifyWith(secretKey).build()
-                .parseSignedClaims(token).getPayload().getSubject();
+        return parseClaims(token).getSubject();
     }
 
     public String getCategory(String token) {
-        return Jwts.parser().verifyWith(secretKey).build()
-                .parseSignedClaims(token).getPayload().get("category", String.class);
+        return parseClaims(token).get("category", String.class);
     }
 
     public String getAuthorities(String token) {
-        return Jwts.parser().verifyWith(secretKey).build()
-                .parseSignedClaims(token).getPayload().get("authorities", String.class);
+        return parseClaims(token).get("authorities", String.class);
     }
 
     public Boolean isTokenExpired(String token) {
-        return Jwts.parser().verifyWith(secretKey).build()
-                .parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        return parseClaims(token).getExpiration().before(new Date());
     }
 
+    public Boolean validateToken(String token) {
+        try {
+            Jwts.parser().verifyWith(secretKey).build()
+                    .parseSignedClaims(token);
+            return true;
+        } catch (MalformedJwtException e) {
+            log.info("Malformed token. message : {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported token. message : {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.info("Illegal token or empty. message : {}", e.getMessage());
+        }
+        return false;
+    }
+
+    public Claims parseClaims(String token) {
+        try {
+            return Jwts.parser().verifyWith(secretKey).build()
+                    .parseSignedClaims(token).getPayload();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
 
 
 
