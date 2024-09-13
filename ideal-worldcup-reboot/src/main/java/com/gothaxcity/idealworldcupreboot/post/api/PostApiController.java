@@ -1,5 +1,6 @@
 package com.gothaxcity.idealworldcupreboot.post.api;
 
+import com.gothaxcity.idealworldcupreboot.accounts.dto.PrincipalUserDetails;
 import com.gothaxcity.idealworldcupreboot.post.dto.PostCreateRequest;
 import com.gothaxcity.idealworldcupreboot.post.dto.PostDto;
 import com.gothaxcity.idealworldcupreboot.post.service.PostService;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.nio.file.attribute.UserPrincipal;
 import java.util.List;
 
 @RestController
@@ -26,7 +26,7 @@ public class PostApiController {
     @PostMapping
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<PostDto> createPost(@ModelAttribute @Valid PostCreateRequest postCreateRequest,
-                                              @AuthenticationPrincipal UserPrincipal currentUser) throws IOException {
+                                              @AuthenticationPrincipal PrincipalUserDetails currentUser) throws IOException {
         System.out.println("currentUser = " + currentUser);
         PostDto postDto = postService.createPost(postCreateRequest, currentUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(postDto);

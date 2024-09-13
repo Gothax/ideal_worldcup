@@ -1,6 +1,7 @@
 package com.gothaxcity.idealworldcupreboot.post.service;
 
 import com.gothaxcity.idealworldcupreboot.accounts.domain.UserEntity;
+import com.gothaxcity.idealworldcupreboot.accounts.dto.PrincipalUserDetails;
 import com.gothaxcity.idealworldcupreboot.accounts.repository.UserRepository;
 import com.gothaxcity.idealworldcupreboot.post.domain.Post;
 import com.gothaxcity.idealworldcupreboot.post.domain.PostImage;
@@ -30,9 +31,9 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional
-    public PostDto createPost(PostCreateRequest request, UserPrincipal currentUser) throws IOException {
+    public PostDto createPost(PostCreateRequest request, PrincipalUserDetails currentUser) throws IOException {
 
-        UserEntity user = userRepository.findByEmail(currentUser.getName()).get();
+        UserEntity user = userRepository.findByEmail(currentUser.getUsername()).get();
 
         List<PostImage> savedPostImages = fileStore.storeFiles(request.getFiles());
 
