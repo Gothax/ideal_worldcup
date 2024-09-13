@@ -27,6 +27,7 @@ public class PostApiController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<PostDto> createPost(@ModelAttribute @Valid PostCreateRequest postCreateRequest,
                                               @AuthenticationPrincipal UserPrincipal currentUser) throws IOException {
+        System.out.println("currentUser = " + currentUser);
         PostDto postDto = postService.createPost(postCreateRequest, currentUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(postDto);
     }

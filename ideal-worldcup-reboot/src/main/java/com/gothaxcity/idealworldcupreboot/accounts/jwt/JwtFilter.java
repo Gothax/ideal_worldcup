@@ -35,9 +35,6 @@ public class JwtFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 // Access Token이 만료된 경우 처리
                 if (jwtTokenProvider.validateToken(refreshToken)) {
-                    // TODO: 이전 Access Token 블랙리스트에 추가
-                    // TODO: Refresh Token 회전 (rotate)
-
                     // 새로운 Access Token 발급
                     String newAccessToken = jwtTokenProvider.generateAccessToken(jwtTokenProvider.getAuthentication(refreshToken));
 

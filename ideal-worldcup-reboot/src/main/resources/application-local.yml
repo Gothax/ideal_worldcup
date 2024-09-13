@@ -15,7 +15,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        default_batch_fetch_size: 100
+#        default_batch_fetch_size: 100
         jdbc:
           batch_size: 64
           batch_versioned_data: true
@@ -46,6 +46,6 @@ logging.level:
 #  org.hibernate.orm.jdbc.bind: trace
 
 file:
-  dir: /Users/leo/worldcup_images/
-#  dir: /C:/workingspace_g/spring-study-media/
+#  dir: /Users/leo/worldcup_images/
+  dir: /C:/workingspace_g/spring-study-media/
 

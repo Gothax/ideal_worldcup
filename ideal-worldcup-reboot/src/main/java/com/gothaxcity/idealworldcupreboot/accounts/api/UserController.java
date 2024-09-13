@@ -5,7 +5,9 @@ import com.gothaxcity.idealworldcupreboot.accounts.dto.response.JoinResponse;
 import com.gothaxcity.idealworldcupreboot.accounts.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<JoinResponse> join(JoinRequest joinRequest) {
+    public ResponseEntity<JoinResponse> join(@RequestBody JoinRequest joinRequest) {
         userService.joinProcess(joinRequest);
         return ResponseEntity.ok().build();
     }
